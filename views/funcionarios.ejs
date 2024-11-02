@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include ('./parciais/header.ejs')%>
+
+<body>
+    
+    <%- include ('./parciais/nav.ejs')%>
+
+    <ul class="funcionarios">
+        <a href="/contratar">Novo Funcionário</a>
+    </ul><br><br>
+    
+    <div class="produtos">
+        <h2>Todos os Funcionários</h2><br>
+        <h2></h2>
+
+        <% if (usuarios.length > 0){%>
+        <% usuarios.forEach(usuarios => {%>
+        <a class="single" href="/usuarios/<%= usuarios._id%>">
+            <h3 class="title"><%= usuarios.nome %></h3>
+            <p class="quantidade"> Cargo: <%=usuarios.cargo%></p><br>
+        </a>
+        <%})%>
+        <%}else{%>
+        <p>Nenhum Funcionário contratado</p>
+            <%}%>
+
+    </div>
+
+    
+    <%- include('./parciais/footer.ejs')%>
+
+</body>
+</html>

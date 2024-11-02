@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include ('./parciais/header.ejs')%>
+
+<body>
+    
+    <nav class="login">
+        <div>
+            <a href="/"><h1>Login</h1></a>
+            <p>Seja bem vindo</p>
+        </div>
+    </nav>
+
+    <div class="novo">
+        <form action="/login" method="post">
+            <label for="login">Login</label>
+            <input type="text" name="login" id="login" required>
+            <label for="senha">Senha</label>
+            <input type="password" name="senha" id="senha" required>
+            <button id="enviar">Logar</button>
+        </form>
+    </div>
+
+    <%- include('./parciais/footer.ejs')%>
+
+    <script>
+        window.onload = function() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.has('error') && params.get('error') === 'senha_invalida') {
+                alert('Usuário ou Senha inválidos. Por favor, tente novamente.');
+            }
+        }
+        document.getElementById('enviar').addEventListener('click', (e) => {
+            const user = document.getElementById('login').value;
+            const senha = document.getElementById('senha').value;
+            //window.alert('O usuário: Lorran Henrique já possui essa senha');
+        
+            if (user === '' || senha === '') {
+                e.preventDefault();
+                alert('Por favor, preencha todos os campos.');
+            }
+
+            
+        });
+    </script>
+</body>
+</html>

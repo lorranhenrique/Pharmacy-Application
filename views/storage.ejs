@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include ('./parciais/header.ejs')%>
+
+<body>
+    
+    <%- include ('./parciais/nav.ejs')%>
+
+    <div class="busca">
+        <input type="text" name="busca" id="busca" style="width: 400px;" value="" placeholder="Insira o nome do produto">
+        <button id="btn">Buscar</button>
+    </div><br><br>
+    
+    <div class="produtos-container" id="produtos-container">
+        <h2>Todos os Produtos</h2><br>
+        <div class="produtos" id="produtos-grid">
+            <% if (farmacos.length > 0) { %>
+                <% farmacos.forEach(farmaco => { %>
+                    <a class="single produto-item" data-nome="<%= farmaco.nome %>" data-quantidade="<%= farmaco.quantidade %>" data-setor="<%= farmaco.setor %>" href="/farmacos/<%= farmaco._id %>">
+                        <h3 class="title"><%= farmaco.nome %></h3>
+                        <p class="quantidade"> quant: <%= farmaco.quantidade %></p>
+                        <p class="quantidade"> setor: <%= farmaco.setor %></p><br>
+                    </a>
+                <% }) %>
+            <% } else { %>
+                <p>Nenhuma medicação encontrada</p>
+            <% } %>
+        </div>
+    </div>
+
+    <%- include('./parciais/footer.ejs') %>
+
+    <script>
+        document.getElementById('btn').addEventListener('click', (e) => {
+            const termoBusca = document.getElementById('busca').value;
+
+            const produtos = Array.from(document.getElementsByClassName('produto-item'));
+
+            const produtosOrdenados = ordenarProdutos(produtos, termoBusca);
+
+            renderizarProdutos(produtosOrdenados);
+        });
+
+        function renderizarProdutos(produtos) {
+            const grid = document.getElementById('produtos-grid');
+            grid.innerHTML = '';
+
+            if (produtos.length > 0) {
+                produtos.forEach(produto => {
+                    grid.appendChild(produto);
+                });
+            } else {
+                grid.innerHTML = '<p>Nenhuma medicação encontrada</p>';
+            }
+        }
+        function ordenarProdutos(produtos, termoBusca) {
+            return produtos.sort((a, b) => {
+                const nomeA = a.getAttribute('data-nome').toLowerCase();
+                const nomeB = b.getAttribute('data-nome').toLowerCase();
+                const busca = termoBusca.toLowerCase();
+
+                const aContemBusca = nomeA.includes(busca);
+                const bContemBusca = nomeB.includes(busca);
+
+                if (aContemBusca && !bContemBusca) return -1;
+                if (!aContemBusca && bContemBusca) return 1;
+
+                return nomeA.localeCompare(nomeB);
+            });
+        }
+    </script>
+
+</body>
+</html>
