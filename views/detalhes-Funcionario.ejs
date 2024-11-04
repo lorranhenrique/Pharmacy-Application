@@ -87,19 +87,24 @@
             .catch(err => console.error('Erro na atualização:', err));
         })
 
-        lixo.addEventListener('click',(e)=>{
+        lixo.addEventListener('click', (e) => {
+            if (lixo.dataset.doc === '<%= usuarios._id %>' && '<%= usuarios.nome %>' === 'admin') {
+                alert('A exclusão do administrador é proibida.');
+                return;
+            }
+        
             const endpoint = `/usuarios/${lixo.dataset.doc}`;
-
-            fetch(endpoint,{
+        
+            fetch(endpoint, {
                 method: 'DELETE'
             })
-
-            .then((response)=>response.json())
-            .then((data)=> window.location.href = data.redirect)
-            .catch((err)=>{
+            .then((response) => response.json())
+            .then((data) => window.location.href = data.redirect)
+            .catch((err) => {
                 console.log(err);
-            })
-        })
+            });
+        });
+        
     </script>
 </body>
 </html>

@@ -40,18 +40,5 @@ usuarioSchema.pre('save',function(next){
 //     next();
 // })
 
-//metodo estatico de login 
-
-// usuarioSchema.statics.login = async function(nome,senha,cargo){
-//     const user = await this.findOne({nome});
-//     if(user){
-//         const auth = await bcrypt.compare(senha,user.senha);
-//         if(auth){
-//             return user
-//         }
-//     }
-
-// }
-
 const Usuario = mongoose.model('Usuario',usuarioSchema);
 module.exports = Usuario;

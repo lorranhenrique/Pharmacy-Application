@@ -59,17 +59,29 @@ const user_index_det = (req,res)=>{
         })
 }
 
-const user_delete = (req,res)=>{
+const user_delete = (req, res) => {
     const id = req.params.id;
 
-    Usuario.findByIdAndDelete(id)
-        .then(result =>{
-            res.json({redirect: '/usuarios'})
+    Usuario.findById(id)
+        .then(usuario => {
+            if (usuario && usuario.nome === 'admin') {
+                return res.status(403).json({ error: 'A exclusão do administrador é proibida.' });
+            }
+
+            // Se não for o admin, realiza a exclusão
+            return Usuario.findByIdAndDelete(id);
         })
-        .catch((err)=>{
-            console.log(err)
+        .then(result => {
+            if (result) {
+                res.json({ redirect: '/usuarios' });
+            }
         })
-}
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: 'Erro ao excluir o usuário.' });
+        });
+};
+
 
 module.exports = {
     user_delete,

@@ -1,0 +1,9 @@
+{
+    "Usuario":[
+        {
+            "nome": "admin",
+            "senha": "000",
+            "cargo": "Administrador"
+        }
+    ]
+}
