@@ -33,12 +33,12 @@ usuarioSchema.pre('save',function(next){
     next();
 })
 
-// usuarioSchema.pre('save', async function(next){
+usuarioSchema.pre('save', async function(next){
     
-//     const salt = await bcrypt.genSalt();
-//     this.senha = await bcrypt.hash(this.senha,salt)
-//     next();
-// })
+    const salt = await bcrypt.genSalt();
+    this.senha = await bcrypt.hash(this.senha,salt)
+    next();
+})
 
 const Usuario = mongoose.model('Usuario',usuarioSchema);
 module.exports = Usuario;

@@ -30,6 +30,7 @@ const dbURI = process.env.MONGO_URI;
 mongoose.connect(dbURI)
     .then((result)=>app.listen(3000))
     .catch((err) => console.error('Erro ao conectar ao MongoDB:', err));
+
     
 app.use(rotasLogin);
 app.use(rotasAutentificar);

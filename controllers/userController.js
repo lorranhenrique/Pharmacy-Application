@@ -22,31 +22,40 @@ const user_post = (req,res)=>{
         })
 }
 
-const user_put = (req,res)=>{
+const bcrypt = require('bcrypt');
+
+const user_put = async (req, res) => {
     const id = req.params.id;
 
-    const updatedData = {
-        nome: req.body.nome,
-        senha: req.body.senha,
-        cargo: req.body.cargo
-    };
+    try {
+        // Cria um objeto para os dados atualizados, exceto a senha
+        const updatedData = {
+            nome: req.body.nome,
+            cargo: req.body.cargo
+        };
 
-    Usuario.findByIdAndUpdate(id, updatedData, { new: true })
-        .then(result => {
-            if (result) {
-                //console.log("Dados atualizados:", result);
-                res.json({ redirect: `/funcionarios` });
-            } else {
-                //console.error("Fármaco não encontrado para atualização");
-                res.status(404).json({ error: 'Usuario não encontrado' });
-            }
-        })
-        .catch(err => {
-            //console.error("Erro ao atualizar fármaco:", err);
-            res.status(500).json({ error: 'Erro ao atualizar Funcionário' });
-        });
+        // Verifica se a senha foi enviada para atualização e criptografa se necessário
+        if (req.body.senha) {
+            const salt = await bcrypt.genSalt(10); // Use 10 como fator de custo padrão
+            updatedData.senha = await bcrypt.hash(req.body.senha, salt);
+        }
 
-}
+        // Atualiza o documento no banco de dados
+        const result = await Usuario.findByIdAndUpdate(id, updatedData, { new: true });
+
+        if (result) {
+            res.json({ redirect: `/funcionarios` });
+        } else {
+            res.status(404).json({ error: 'Usuário não encontrado' });
+        }
+    } catch (err) {
+        console.error("Erro ao atualizar usuário:", err);
+        res.status(500).json({ error: 'Erro ao atualizar Funcionário' });
+    }
+};
+
+module.exports = { user_put };
+
 
 const user_index_det = (req,res)=>{
     const id= req.params.id;
