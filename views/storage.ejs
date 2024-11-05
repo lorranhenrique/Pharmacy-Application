@@ -20,7 +20,7 @@
                     <a class="single produto-item" data-nome="<%= farmaco.nome %>" data-quantidade="<%= farmaco.quantidade %>" data-setor="<%= farmaco.setor %>" href="/farmacos/<%= farmaco._id %>">
                         <h3 class="title"><%= farmaco.nome %></h3>
                         <p class="quantidade"> quant: <%= farmaco.quantidade %></p>
-                        <p class="quantidade"> setor: <%= farmaco.setor %></p><br>
+                        <p class="quantidade"> setor: <%= farmaco.setor.toUpperCase() %></p><br>
                     </a>
                 <% }) %>
             <% } else { %>
