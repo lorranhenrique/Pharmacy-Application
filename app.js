@@ -28,9 +28,8 @@ app.use(cookieParser());
 app.use(methodOverride('_method'));
 app.use(morgan('dev'));
 
-const dbURI = process.env.MONGO_URI; //URI aqui
+const dbURI = process.env.MONGO_URI; 
 let globalSession;
-
 
 mongoose.connect(dbURI)
     .then(async () => {
@@ -42,11 +41,10 @@ mongoose.connect(dbURI)
     .catch((err) => console.error('Erro ao conectar ao MongoDB:', err));
 
 
-const resetDatabase = async () => {
-    console.log("Resetando o banco de dados...");
+const limparBancoAoEncerrar = async () => {
+    console.log("Limpando o banco de dados ao encerrar...");
 
     try {
-        // Apaga todos os documentos de todas as coleções
         const collections = await mongoose.connection.db.collections();
         for (let collection of collections) {
             await collection.deleteMany({});
@@ -58,34 +56,31 @@ const resetDatabase = async () => {
             cargo: 'Administrador'
         });
 
-        console.log("Banco de dados resetado e administrador recriado.");
+        console.log("Banco de dados limpo e administrador recriado.");
     } catch (err) {
-        console.error("Erro ao resetar o banco de dados:", err);
+        console.error("Erro ao limpar o banco de dados:", err);
+    } finally {
+        await globalSession.abortTransaction();
+        await globalSession.endSession();
+        await mongoose.connection.close();
+        console.log("Conexão com o MongoDB encerrada.");
     }
 };
 
+process.on('exit', limparBancoAoEncerrar);
 process.on('SIGINT', async () => {
-    try {
-        await resetDatabase();
-        await globalSession.abortTransaction(); // Reverte todas as transações
-        await globalSession.endSession();
-
-        await mongoose.connection.close(); // Remove o callback e apenas espera a Promise
-
-        console.log("Conexão com o MongoDB encerrada.");
-        process.exit(0);
-    } catch (err) {
-        console.error("Erro ao encerrar a conexão com o MongoDB:", err);
-        process.exit(1);
-    }
+    await limparBancoAoEncerrar();
+    process.exit(0);
 });
-
+process.on('SIGTERM', async () => {
+    await limparBancoAoEncerrar();
+    process.exit(0);
+});
 process.on('uncaughtException', async (err) => {
     console.error("Exceção não tratada:", err);
-    await resetDatabaseOnExit();
+    await limparBancoAoEncerrar();
     process.exit(1);
 });
-
 
 app.use(rotasLogin);
 app.use(rotasAutentificar);

@@ -28,19 +28,14 @@ const user_put = async (req, res) => {
     const id = req.params.id;
 
     try {
-        // Cria um objeto para os dados atualizados, exceto a senha
         const updatedData = {
             nome: req.body.nome,
             cargo: req.body.cargo
         };
-
-        // Verifica se a senha foi enviada para atualização e criptografa se necessário
         if (req.body.senha) {
-            const salt = await bcrypt.genSalt(10); // Use 10 como fator de custo padrão
+            const salt = await bcrypt.genSalt(10);
             updatedData.senha = await bcrypt.hash(req.body.senha, salt);
         }
-
-        // Atualiza o documento no banco de dados
         const result = await Usuario.findByIdAndUpdate(id, updatedData, { new: true });
 
         if (result) {
@@ -76,8 +71,6 @@ const user_delete = (req, res) => {
             if (usuario && usuario.nome === 'admin') {
                 return res.status(403).json({ error: 'A exclusão do administrador é proibida.' });
             }
-
-            // Se não for o admin, realiza a exclusão
             return Usuario.findByIdAndDelete(id);
         })
         .then(result => {
