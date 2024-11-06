@@ -2,7 +2,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const cors = require('cors');
-const bcrypt = require('bcrypt');
 const methodOverride = require('method-override');
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
@@ -17,7 +16,6 @@ const rotasAutentificar = require('./routes/rotasAutentificar');
 const rotasLogout = require('./routes/rotasLogout');
 const rotasRedirecionamento = require('./routes/rotasRedirecionamento');
 const rotas404 = require('./routes/rotas404');
-
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
@@ -72,15 +70,8 @@ process.on('SIGINT', async () => {
     await limparBancoAoEncerrar();
     process.exit(0);
 });
-process.on('SIGTERM', async () => {
-    await limparBancoAoEncerrar();
-    process.exit(0);
-});
-process.on('uncaughtException', async (err) => {
-    console.error("Exceção não tratada:", err);
-    await limparBancoAoEncerrar();
-    process.exit(1);
-});
+
+const jwt = require('jsonwebtoken');
 
 app.use(rotasLogin);
 app.use(rotasAutentificar);
