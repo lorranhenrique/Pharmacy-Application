@@ -26,8 +26,7 @@ app.use(cookieParser());
 app.use(methodOverride('_method'));
 app.use(morgan('dev'));
 
-const dbURI = process.env.MONGO_URI; 
-let globalSession;
+const dbURI = 'mongodb+srv://lorranhrezendea:test1234@farmacia.jnm2nm8.mongodb.net/dados?retryWrites=true&w=majority&appName=farmacia';
 
 mongoose.connect(dbURI)
     .then(async () => {
