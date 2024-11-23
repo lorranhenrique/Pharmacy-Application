@@ -13,4 +13,4 @@ COMO UTILIZAR
 7. Agora é só testar livremente, gerenciando farmacos e usuários do sistema;
 8. Após o uso de um Ctrl c no terminal para encerrar a aplicação.
 
-OBS: Eu queria deixar um banco simples para testes, então optei por deixar o .env fora do gitignore, para disponibilizar esse simples para o uso da aplicação.
+OBS: Eu queria deixar um banco simples para testes, então optei por deixar o .env fora do gitignore, para disponibilizar esse para o uso da aplicação.
