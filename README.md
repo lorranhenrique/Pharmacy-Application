@@ -1,5 +1,4 @@
-#Farmácia_Fullstack
-
+Pharmacy-Application
 
 A pharmacy manager application with user and product control. 
 The application was developed in Java Script
